@@ -1,0 +1,15 @@
+# Byte-compiled files
+*.pyc
+*.pyo
+__pycache__/
+
+# Virtual environment directories
+venv/
+env/
+
+# Python-specific cache files
+*.pytest_cache/
+
+# Environment files
+.env
+*.env
