@@ -20,3 +20,29 @@ class InventoryItem(db.Model):
     price = db.Column(db.Float, nullable=False)
     description = db.Column(db.String(200), nullable=True)
     stock = db.Column(db.Integer, nullable=False)
+
+class Sale(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    customer_username = db.Column(db.String(50), db.ForeignKey('customer.username'), nullable=False)
+    item_name = db.Column(db.String(100), db.ForeignKey('inventory_item.name'), nullable=False)
+    quantity = db.Column(db.Integer, nullable=False)
+    total_amount = db.Column(db.Float, nullable=False)
+
+    customer = db.relationship("Customer", back_populates="sales")
+    item = db.relationship("InventoryItem", back_populates="sales")
+
+Customer.sales = db.relationship("Sale", back_populates="customer")
+InventoryItem.sales = db.relationship("Sale", back_populates="item")
+
+class Review(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    customer_username = db.Column(db.String(50), db.ForeignKey('customer.username'), nullable=False)
+    product_name = db.Column(db.String(100), db.ForeignKey('inventory_item.name'), nullable=False)
+    rating = db.Column(db.Integer, nullable=False)
+    comment = db.Column(db.String(255))
+
+    customer = db.relationship("Customer", back_populates="reviews")
+    product = db.relationship("InventoryItem", back_populates="reviews")
+
+Customer.reviews = db.relationship("Review", back_populates="customer")
+InventoryItem.reviews = db.relationship("Review", back_populates="product")
