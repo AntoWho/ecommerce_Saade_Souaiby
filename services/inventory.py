@@ -67,6 +67,8 @@ def update_item(name):
         return jsonify({"error": "Item not found."}), 404
 
     data = request.json
+    data['name'] = name
+    print(data)
     errors = validate_inventory_data(data)
     if errors:
         return jsonify({"errors": errors}), 400
