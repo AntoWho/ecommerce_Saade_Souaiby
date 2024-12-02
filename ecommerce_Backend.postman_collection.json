@@ -1,0 +1,648 @@
+{
+	"info": {
+		"_postman_id": "89ef2b07-e1d9-44ba-99f9-2171f5696d8e",
+		"name": "ecommerce_Backend",
+		"description": "APIs for managing customers, inventory, sales, and reviews in the e-commerce backend.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "32714611"
+	},
+	"item": [
+		{
+			"name": "Customers",
+			"item": [
+				{
+					"name": "Register Customer",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"full_name\": \"John Doe\",\r\n  \"username\": \"john.doe\",\r\n  \"password\": \"securePass123\",\r\n  \"age\": 30,\r\n  \"address\": \"123 Main St, City, Country\",\r\n  \"gender\": \"Male\",\r\n  \"marital_status\": \"Single\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/customers/register",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"customers",
+								"register"
+							]
+						},
+						"description": "Registers a new customer in the system. Ensures that the username is unique and validates the customer details."
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Customers",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/customers/customers",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"customers",
+								"customers"
+							]
+						},
+						"description": "Retrieves all registered customers."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Customer by Username",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/customers/customer/{{username}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"customers",
+								"customer",
+								"{{username}}"
+							]
+						},
+						"description": "Retrieves details of a specific customer by username."
+					},
+					"response": []
+				},
+				{
+					"name": "Update Customer",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"full_name\": \"John Updated\",\r\n  \"password\": \"newSecurePass123\",\r\n  \"age\": 31,\r\n  \"username\" : \"john.doe\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/customers/update/{{username}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"customers",
+								"update",
+								"{{username}}"
+							]
+						},
+						"description": "Updates customer details by username."
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Customer",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/customers/delete/{{username}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"customers",
+								"delete",
+								"{{username}}"
+							]
+						},
+						"description": "Deletes a customer by username."
+					},
+					"response": []
+				},
+				{
+					"name": "Charge Wallet",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"amount\": 50.0\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/customers/charge/{{username}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"customers",
+								"charge",
+								"{{username}}"
+							]
+						},
+						"description": "Adds funds to a customer's wallet."
+					},
+					"response": []
+				},
+				{
+					"name": "Deduct Wallet",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"amount\": 30.0\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/customers/deduct/{{username}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"customers",
+								"deduct",
+								"{{username}}"
+							]
+						},
+						"description": "Deducts funds from a customer's wallet."
+					},
+					"response": []
+				}
+			],
+			"description": "API for managing customers"
+		},
+		{
+			"name": "Inventory",
+			"item": [
+				{
+					"name": "Add Inventory Item",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"Laptop\",\r\n  \"category\": \"Electronics\",\r\n  \"price\": 1200.99,\r\n  \"description\": \"A high-end gaming laptop.\",\r\n  \"stock\": 10\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/inventory/add_item",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"inventory",
+								"add_item"
+							]
+						},
+						"description": "Adds a new item to the inventory."
+					},
+					"response": []
+				},
+				{
+					"name": "Update Inventory Item",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"price\": 11.50,\r\n  \"stock\": 15,\r\n  \"category\": \"Electronics\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/inventory/update_item/{{name}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"inventory",
+								"update_item",
+								"{{name}}"
+							]
+						},
+						"description": "Updates an existing inventory item."
+					},
+					"response": []
+				},
+				{
+					"name": "Deduct Stock",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"quantity\": 2\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/inventory/deduct_stock/{{name}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"inventory",
+								"deduct_stock",
+								"{{name}}"
+							]
+						},
+						"description": "Deducts a specified quantity from an item's stock."
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Items",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n  {\r\n    \"name\": \"Laptop\",\r\n    \"category\": \"Electronics\",\r\n    \"price\": 1200.99,\r\n    \"description\": \"A high-end gaming laptop.\",\r\n    \"stock\": 8\r\n  },\r\n  {\r\n    \"name\": \"T-shirt\",\r\n    \"category\": \"Clothes\",\r\n    \"price\": 20.0,\r\n    \"description\": \"A cotton T-shirt.\",\r\n    \"stock\": 50\r\n  }\r\n]\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/inventory/get_items",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"inventory",
+								"get_items"
+							]
+						},
+						"description": "Retrieves all items in the inventory."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Item by Name",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/inventory/get_item/{{name}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"inventory",
+								"get_item",
+								"{{name}}"
+							]
+						},
+						"description": "Retrieves the details of a specific item by name."
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Item",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/inventory/delete_item/{{name}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"inventory",
+								"delete_item",
+								"{{name}}"
+							]
+						},
+						"description": "Deletes an inventory item by name."
+					},
+					"response": []
+				}
+			],
+			"description": "API for managing inventory"
+		},
+		{
+			"name": "Sales",
+			"item": [
+				{
+					"name": "Display Available Goods",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/sales/display_goods",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"sales",
+								"display_goods"
+							]
+						},
+						"description": "Displays all goods that are currently in stock, along with their names and prices."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Good Details",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/sales/goods/{{name}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"sales",
+								"goods",
+								"{{name}}"
+							]
+						},
+						"description": "Retrieves full details of a specific item by name."
+					},
+					"response": []
+				},
+				{
+					"name": "Make Purchase",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"username\": \"john.doe\",\r\n  \"item_name\": \"Laptop\",\r\n  \"quantity\": 1\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/sales/purchase",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"sales",
+								"purchase"
+							]
+						},
+						"description": "Processes a purchase made by a customer."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Purchase History",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/sales/purchase_history/{{username}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"sales",
+								"purchase_history",
+								"{{username}}"
+							]
+						},
+						"description": "Retrieves the purchase history of a specific customer."
+					},
+					"response": []
+				}
+			],
+			"description": "API for managing sales"
+		},
+		{
+			"name": "Reviews",
+			"item": [
+				{
+					"name": "Submit Review",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"username\": \"john.doe\",\r\n  \"item_name\": \"Laptop\",\r\n  \"rating\": 5,\r\n  \"comment\": \"Excellent performance!\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/reviews/submit",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"reviews",
+								"submit"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Review",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"username\": \"john.doe\",\r\n  \"rating\": 4,\r\n  \"comment\": \"Updated: Very good, but battery life could improve.\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/reviews/update/{{review}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"reviews",
+								"update",
+								"{{review}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Review",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"username\": \"john.doe\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/reviews/delete/{{review}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"reviews",
+								"delete",
+								"{{review}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Moderate Review (Admin Only)",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"action\": \"approve\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/reviews/moderate/{{review}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"reviews",
+								"moderate",
+								"{{review}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Product Reviews",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n  {\r\n    \"username\": \"john.doe\",\r\n    \"rating\": 5,\r\n    \"comment\": \"Excellent performance!\",\r\n    \"timestamp\": \"2024-12-01 15:00:00\"\r\n  },\r\n  {\r\n    \"username\": \"jane.doe\",\r\n    \"rating\": 4,\r\n    \"comment\": \"Very good but slightly expensive.\",\r\n    \"timestamp\": \"2024-12-02 16:30:00\"\r\n  }\r\n]\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/reviews/product_reviews/{{name}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"reviews",
+								"product_reviews",
+								"{{name}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Customer Reviews",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/reviews/customer_reviews/{{username}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"reviews",
+								"customer_reviews",
+								"{{username}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Review Details",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/reviews/review/{{review}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"reviews",
+								"review",
+								"{{review}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "username",
+			"value": "username"
+		},
+		{
+			"key": "name",
+			"value": "Laptop",
+			"type": "default"
+		},
+		{
+			"key": "review",
+			"value": "1",
+			"type": "default"
+		}
+	]
+}
