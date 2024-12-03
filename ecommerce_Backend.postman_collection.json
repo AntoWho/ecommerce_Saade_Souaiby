@@ -25,9 +25,9 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/customers/register",
+							"raw": "{{customer_container}}/customers/register",
 							"host": [
-								"{{base_url}}"
+								"{{customer_container}}"
 							],
 							"path": [
 								"customers",
@@ -40,17 +40,29 @@
 				},
 				{
 					"name": "Get All Customers",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{base_url}}/customers/customers",
+							"raw": "{{customer_container}}/customers/customers  {{username}}",
 							"host": [
-								"{{base_url}}"
+								"{{customer_container}}"
 							],
 							"path": [
 								"customers",
-								"customers"
+								"customers  {{username}}"
 							]
 						},
 						"description": "Retrieves all registered customers."
@@ -63,9 +75,9 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{base_url}}/customers/customer/{{username}}",
+							"raw": "{{customer_container}}/customers/customer/{{username}}",
 							"host": [
-								"{{base_url}}"
+								"{{customer_container}}"
 							],
 							"path": [
 								"customers",
@@ -92,9 +104,9 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/customers/update/{{username}}",
+							"raw": "{{customer_container}}/customers/update/{{username}}",
 							"host": [
-								"{{base_url}}"
+								"{{customer_container}}"
 							],
 							"path": [
 								"customers",
@@ -112,9 +124,9 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "{{base_url}}/customers/delete/{{username}}",
+							"raw": "{{customer_container}}/customers/delete/{{username}}",
 							"host": [
-								"{{base_url}}"
+								"{{customer_container}}"
 							],
 							"path": [
 								"customers",
@@ -141,9 +153,9 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/customers/charge/{{username}}",
+							"raw": "{{customer_container}}/customers/charge/{{username}}",
 							"host": [
-								"{{base_url}}"
+								"{{customer_container}}"
 							],
 							"path": [
 								"customers",
@@ -170,9 +182,9 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/customers/deduct/{{username}}",
+							"raw": "{{customer_container}}/customers/deduct/{{username}}",
 							"host": [
-								"{{base_url}}"
+								"{{customer_container}}"
 							],
 							"path": [
 								"customers",
@@ -205,9 +217,9 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/inventory/add_item",
+							"raw": "{{inventory_container}}/inventory/add_item",
 							"host": [
-								"{{base_url}}"
+								"{{inventory_container}}"
 							],
 							"path": [
 								"inventory",
@@ -233,9 +245,9 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/inventory/update_item/{{name}}",
+							"raw": "{{inventory_container}}/inventory/update_item/{{name}}",
 							"host": [
-								"{{base_url}}"
+								"{{inventory_container}}"
 							],
 							"path": [
 								"inventory",
@@ -262,9 +274,9 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/inventory/deduct_stock/{{name}}",
+							"raw": "{{inventory_container}}/inventory/deduct_stock/{{name}}",
 							"host": [
-								"{{base_url}}"
+								"{{inventory_container}}"
 							],
 							"path": [
 								"inventory",
@@ -294,9 +306,9 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/inventory/get_items",
+							"raw": "{{inventory_container}}/inventory/get_items",
 							"host": [
-								"{{base_url}}"
+								"{{inventory_container}}"
 							],
 							"path": [
 								"inventory",
@@ -313,9 +325,9 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{base_url}}/inventory/get_item/{{name}}",
+							"raw": "{{inventory_container}}/inventory/get_item/{{name}}",
 							"host": [
-								"{{base_url}}"
+								"{{inventory_container}}"
 							],
 							"path": [
 								"inventory",
@@ -333,9 +345,9 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "{{base_url}}/inventory/delete_item/{{name}}",
+							"raw": "{{inventory_container}}/inventory/delete_item/{{name}}",
 							"host": [
-								"{{base_url}}"
+								"{{inventory_container}}"
 							],
 							"path": [
 								"inventory",
@@ -359,9 +371,9 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{base_url}}/sales/display_goods",
+							"raw": "{{sales_container}}/sales/display_goods",
 							"host": [
-								"{{base_url}}"
+								"{{sales_container}}"
 							],
 							"path": [
 								"sales",
@@ -378,9 +390,9 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{base_url}}/sales/goods/{{name}}",
+							"raw": "{{sales_container}}/sales/goods/{{name}}",
 							"host": [
-								"{{base_url}}"
+								"{{sales_container}}"
 							],
 							"path": [
 								"sales",
@@ -407,9 +419,9 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/sales/purchase",
+							"raw": "{{sales_container}}/sales/purchase",
 							"host": [
-								"{{base_url}}"
+								"{{sales_container}}"
 							],
 							"path": [
 								"sales",
@@ -426,9 +438,9 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{base_url}}/sales/purchase_history/{{username}}",
+							"raw": "{{sales_container}}/sales/purchase_history/{{username}}",
 							"host": [
-								"{{base_url}}"
+								"{{sales_container}}"
 							],
 							"path": [
 								"sales",
@@ -461,9 +473,9 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/reviews/submit",
+							"raw": "{{reviews_container}}/reviews/submit",
 							"host": [
-								"{{base_url}}"
+								"{{reviews_container}}"
 							],
 							"path": [
 								"reviews",
@@ -488,9 +500,9 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/reviews/update/{{review}}",
+							"raw": "{{reviews_container}}/reviews/update/{{review}}",
 							"host": [
-								"{{base_url}}"
+								"{{reviews_container}}"
 							],
 							"path": [
 								"reviews",
@@ -516,9 +528,9 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/reviews/delete/{{review}}",
+							"raw": "{{reviews_container}}/reviews/delete/{{review}}",
 							"host": [
-								"{{base_url}}"
+								"{{reviews_container}}"
 							],
 							"path": [
 								"reviews",
@@ -544,9 +556,9 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/reviews/moderate/{{review}}",
+							"raw": "{{reviews_container}}/reviews/moderate/{{review}}",
 							"host": [
-								"{{base_url}}"
+								"{{reviews_container}}"
 							],
 							"path": [
 								"reviews",
@@ -575,9 +587,9 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/reviews/product_reviews/{{name}}",
+							"raw": "{{reviews_container}}/reviews/product_reviews/{{name}}",
 							"host": [
-								"{{base_url}}"
+								"{{reviews_container}}"
 							],
 							"path": [
 								"reviews",
@@ -594,9 +606,9 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{base_url}}/reviews/customer_reviews/{{username}}",
+							"raw": "{{reviews_container}}/reviews/customer_reviews/{{username}}",
 							"host": [
-								"{{base_url}}"
+								"{{reviews_container}}"
 							],
 							"path": [
 								"reviews",
@@ -613,9 +625,9 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{base_url}}/reviews/review/{{review}}",
+							"raw": "{{reviews_container}}/reviews/review/{{review}}",
 							"host": [
-								"{{base_url}}"
+								"{{reviews_container}}"
 							],
 							"path": [
 								"reviews",
@@ -642,6 +654,26 @@
 		{
 			"key": "review",
 			"value": "1",
+			"type": "default"
+		},
+		{
+			"key": "customer_container",
+			"value": "localhost:5001",
+			"type": "default"
+		},
+		{
+			"key": "inventory_container",
+			"value": "localhost:5002",
+			"type": "default"
+		},
+		{
+			"key": "sales_container",
+			"value": "localhost:5003",
+			"type": "default"
+		},
+		{
+			"key": "reviews_container",
+			"value": "localhost:5004",
 			"type": "default"
 		}
 	]

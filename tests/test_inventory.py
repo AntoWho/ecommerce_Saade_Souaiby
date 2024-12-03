@@ -1,6 +1,6 @@
 import pytest
 from app import app
-from database import db, InventoryItem
+from database.database import db, InventoryItem
 
 @pytest.fixture
 def client(): #temporary test env. to test our requests without actually running the server

@@ -1,5 +1,6 @@
 from flask import Blueprint, request, jsonify
-from database import db, Customer
+from flask import Flask
+from database.database import db, Customer
 from werkzeug.security import generate_password_hash, check_password_hash
 import re
 
@@ -247,3 +248,20 @@ def deduct_wallet(username):
     customer.wallet -= amount
     db.session.commit()
     return jsonify({"message": f"${amount} deducted from wallet"}), 200
+
+
+app = Flask(__name__)
+
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:12345@mysql_container:3306/ecommerce'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+db.init_app(app)
+
+app.register_blueprint(customers_bp, url_prefix='/customers')
+
+
+# Main entry point
+if __name__ == '__main__':
+    with app.app_context():
+        db.create_all()
+    app.run(host="0.0.0.0", port=5000, debug=True)

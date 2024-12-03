@@ -1,5 +1,5 @@
-from flask import Blueprint, request, jsonify
-from database import db, Customer, InventoryItem, Review
+from flask import Blueprint, request, jsonify, Flask
+from database.database import db, Customer, InventoryItem, Review
 from datetime import datetime
 
 reviews_bp = Blueprint('reviews', __name__)
@@ -264,3 +264,20 @@ def moderate_review(review_id):
 
     db.session.commit()
     return jsonify({"message": f"Review {action}d successfully."}), 200
+
+app = Flask(__name__)
+
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:12345@mysql_container:3306/ecommerce'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+db.init_app(app)
+
+app.register_blueprint(reviews_bp, url_prefix='/reviews')
+
+
+# Main entry point
+if __name__ == '__main__':
+    with app.app_context():
+        db.create_all()
+    app.run(host="0.0.0.0", port=5000, debug=True)
+

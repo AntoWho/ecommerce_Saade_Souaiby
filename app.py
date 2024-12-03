@@ -1,9 +1,9 @@
 from flask import Flask
-from database import db
-from services.customers import customers_bp
-from services.inventory import inventory_bp
-from services.sales import sales_bp
-from services.reviews import reviews_bp
+from database.database import db
+from services.customers.customers import customers_bp
+from services.inventory.inventory import inventory_bp
+from services.sales.sales import sales_bp
+from services.reviews.reviews import reviews_bp
 
 app = Flask(__name__)
 

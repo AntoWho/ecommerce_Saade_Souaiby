@@ -1,5 +1,5 @@
-from flask import Blueprint, request, jsonify
-from database import db, InventoryItem
+from flask import Blueprint, request, jsonify, Flask
+from database.database import db, InventoryItem
 
 inventory_bp = Blueprint('inventory', __name__)
 
@@ -174,3 +174,20 @@ def delete_item(name):
     db.session.delete(item)
     db.session.commit()
     return jsonify({"message": f"Item '{name}' deleted successfully."}), 200
+
+
+app = Flask(__name__)
+
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:12345@mysql_container:3306/ecommerce'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+db.init_app(app)
+
+app.register_blueprint(inventory_bp, url_prefix='/inventory')
+
+
+# Main entry point
+if __name__ == '__main__':
+    with app.app_context():
+        db.create_all()
+    app.run(host="0.0.0.0", port=5000, debug=True)

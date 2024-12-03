@@ -1,0 +1,66 @@
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: mysql_container
+    environment:
+      MYSQL_ROOT_PASSWORD: 12345
+      MYSQL_DATABASE: ecommerce
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+
+  customers:
+    build:
+      context: .
+      dockerfile: ./services/customers/Dockerfile
+    container_name: customers_service
+    ports:
+      - "5001:5000"
+    environment:
+      FLASK_APP: customers.py
+      SQLALCHEMY_DATABASE_URI: mysql+pymysql://root:12345@mysql:3306/ecommerce
+    depends_on:
+      - mysql
+
+  inventory:
+    build:
+      context: .
+      dockerfile: ./services/inventory/Dockerfile
+    container_name: inventory_service
+    ports:
+      - "5002:5000"
+    environment:
+      FLASK_APP: inventory.py
+      SQLALCHEMY_DATABASE_URI: mysql+pymysql://root:12345@mysql:3306/ecommerce
+    depends_on:
+      - mysql
+
+  sales:
+    build:
+      context: .
+      dockerfile: ./services/sales/Dockerfile
+    container_name: sales_service
+    ports:
+      - "5003:5000"
+    environment:
+      FLASK_APP: sales.py
+      SQLALCHEMY_DATABASE_URI: mysql+pymysql://root:12345@mysql:3306/ecommerce
+    depends_on:
+      - mysql
+
+  reviews:
+    build:
+      context: .
+      dockerfile: ./services/reviews/Dockerfile
+    container_name: reviews_service
+    ports:
+      - "5004:5000"
+    environment:
+      FLASK_APP: reviews.py
+      SQLALCHEMY_DATABASE_URI: mysql+pymysql://root:12345@mysql:3306/ecommerce
+    depends_on:
+      - mysql
+
+volumes:
+  db_data:

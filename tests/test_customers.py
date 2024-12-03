@@ -1,6 +1,6 @@
 import pytest
 from app import app
-from database import db, Customer
+from database.database import db, Customer
 
 @pytest.fixture
 def client():
