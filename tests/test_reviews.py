@@ -303,33 +303,6 @@ def test_moderate_review_approve(client):
         review = db.session.get(Review, review_id)
         assert review.status == 'approved'
 
-def test_moderate_review_flag(client):
-    """
-    Test flagging a review as an admin.
-    """
-    # Submit a review
-    client.post('/reviews/submit', json={
-        "username": "janesmith",
-        "item_name": "Laptop",
-        "rating": 1,
-        "comment": "Terrible!"
-    })
-    with app.app_context():
-        review = Review.query.first()
-        review_id = review.id
-
-    # Moderate the review
-    response = client.post(f'/reviews/moderate/{review_id}', json={
-        "action": "flag"
-    })
-    assert response.status_code == 200
-    assert response.get_json()["message"] == "Review flagd successfully."
-
-    # Check that the status is updated
-    with app.app_context():
-        review = db.session.get(Review, review_id)
-        assert review.status == 'flagged'
-
 def test_moderate_review_delete(client):
     """
     Test deleting a review as an admin.
@@ -377,4 +350,51 @@ def test_moderate_review_invalid_action(client):
         "action": "invalid_action"
     })
     assert response.status_code == 400
-    assert response.get_json()["error"] == "Invalid action. Must be 'approve', 'flag', or 'delete'."
+    assert response.get_json()["error"] == "Invalid action. Must be 'approve' or 'delete'."
+
+def test_flag_review(client):
+    """
+    Test the ability to flag a review as inappropriate.
+    """
+    # Create a sample review in the database
+    client.post('/reviews/submit', json={
+        "username": "janesmith",
+        "item_name": "Laptop",
+        "rating": 3,
+        "comment": "Average."
+    })
+    with app.app_context():
+        review = Review.query.first()
+        review_id = review.id
+
+    # Flag the review
+    response = client.post(f'/reviews/flag/{review_id}')  
+    assert response.status_code == 200
+    assert response.get_json()["message"] == "Review 1 has been flagged for moderation."
+
+def test_get_flagged_reviews(client):
+    """
+    Test the ability to retrieve flagged reviews.
+    """
+    # Create and flag a review
+    client.post('/reviews/submit', json={
+        "username": "janesmith",
+        "item_name": "Laptop",
+        "rating": 3,
+        "comment": "Average."
+    })
+    with app.app_context():
+        review = Review.query.first()
+        review_id = review.id
+
+
+    client.post(f'/reviews/flag/{review_id}')
+
+    # Retrieve flagged reviews
+    response = client.get('/reviews/flagged')
+    assert response.status_code == 200
+    flagged_reviews = response.get_json()
+    assert len(flagged_reviews) == 1
+    assert flagged_reviews[0]["id"] == 1
+    assert flagged_reviews[0]["comment"] == "Average."
+

@@ -1,8 +1,28 @@
 from flask import Blueprint, request, jsonify, Flask
 from database.database import db, Customer, InventoryItem, Review
 from datetime import datetime
+from sqlalchemy.sql import text
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 
 reviews_bp = Blueprint('reviews', __name__)
+
+@reviews_bp.route('/health', methods=['GET'])
+def health_check():
+    """
+    Health check for the Reviews service.
+    """
+    try:
+        db.session.execute(text('SELECT 1'))
+        db_status = "Healthy"
+    except Exception as e:
+        db_status = f"Unhealthy - {str(e)}"
+
+    return jsonify({
+        "service": "Reviews Service",
+        "status": "Healthy",
+        "database": db_status
+    }), 200
 
 @reviews_bp.route('/submit', methods=['POST'])
 def submit_review():
@@ -227,14 +247,14 @@ def get_review_details(review_id):
 @reviews_bp.route('/moderate/<int:review_id>', methods=['POST'])
 def moderate_review(review_id):
     """
-    Allows administrators to moderate a review by approving or flagging it.
+    Allows administrators to moderate a review by approving or deleting it.
 
     Args:
         review_id (int): The ID of the review to moderate.
 
     Request JSON:
         {
-            "action": "<approve|flag|delete>"
+            "action": "<approve|delete>"
         }
 
     Returns:
@@ -243,11 +263,8 @@ def moderate_review(review_id):
     data = request.json
     action = data.get('action')
 
-    if action not in ['approve', 'flag', 'delete']:
-        return jsonify({"error": "Invalid action. Must be 'approve', 'flag', or 'delete'."}), 400
-
-    # For simplicity, assume admin access is always granted
-    # In a real application, you need to check admin authentication
+    if action not in ['approve',  'delete']:
+        return jsonify({"error": "Invalid action. Must be 'approve' or 'delete'."}), 400
 
     review = db.session.get(Review, review_id)
     if not review:
@@ -255,8 +272,6 @@ def moderate_review(review_id):
 
     if action == 'approve':
         review.status = 'approved'
-    elif action == 'flag':
-        review.status = 'flagged'
     elif action == 'delete':
         db.session.delete(review)
         db.session.commit()
@@ -265,12 +280,62 @@ def moderate_review(review_id):
     db.session.commit()
     return jsonify({"message": f"Review {action}d successfully."}), 200
 
+@reviews_bp.route('/flag/<int:review_id>', methods=['POST'])
+def flag_review(review_id):
+    """
+    Flags a review as inappropriate.
+
+    Args:
+        review_id (int): ID of the review to flag.
+
+    Returns:
+        Response: JSON message indicating success or failure.
+    """
+    review = Review.query.get(review_id)
+    if not review:
+        return jsonify({"error": "Review not found"}), 404
+
+    review.status = 'flagged'
+    db.session.commit()
+    return jsonify({"message": f"Review {review_id} has been flagged for moderation."}), 200
+
+@reviews_bp.route('/flagged', methods=['GET'])
+def get_flagged_reviews():
+    """
+    Retrieves all flagged reviews for moderation.
+
+    Returns:
+        Response: JSON list of flagged reviews.
+    """
+    flagged_reviews = Review.query.filter_by(status="flagged").all()
+    return jsonify([{
+    "id": review.id,
+    "customer_id": review.customer_id,
+    "item_id": review.item_id,  # Changed from product_id to item_id
+    "rating": review.rating,
+    "comment": review.comment,  # Renamed from review_text to comment
+    "status": review.status,
+    "timestamp": review.timestamp.isoformat()  # Convert datetime to ISO format for JSON
+    
+    } for review in flagged_reviews]), 200
+
+
+
+
 app = Flask(__name__)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:12345@mysql_container:3306/ecommerce'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db.init_app(app)
+
+limiter = Limiter(
+    get_remote_address,
+    app=app,
+    default_limits=["20 per minute"]  # Apply 20 requests per minute for the entire service
+)
+
+limiter.limit("20 per minute")(reviews_bp)  # Limit review routes to 20 requests per minute
 
 app.register_blueprint(reviews_bp, url_prefix='/reviews')
 

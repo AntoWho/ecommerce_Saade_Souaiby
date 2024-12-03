@@ -3,8 +3,33 @@ from flask import Flask
 from database.database import db, Customer
 from werkzeug.security import generate_password_hash, check_password_hash
 import re
+from sqlalchemy.sql import text
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 
 customers_bp = Blueprint('customers', __name__)
+
+@customers_bp.route('/health', methods=['GET'])
+def health_check():
+    """
+    Health check for the Customers service.
+
+    Returns:
+        Response: JSON with service and database status.
+    """
+    try:
+        # Check database connectivity
+        db.session.execute(text('SELECT 1'))
+        db_status = "Healthy"
+    except Exception as e:
+        db_status = f"Unhealthy - {str(e)}"
+
+    return jsonify({
+        "service": "Customers Service",
+        "status": "Healthy",
+        "database": db_status
+    }), 200
+
 
 def validate_customer_data(data):
     """
@@ -256,6 +281,13 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:12345@mysql_contai
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db.init_app(app)
+limiter = Limiter(
+    get_remote_address,
+    app=app,
+    default_limits=["20 per minute"]  # Apply 20 requests per minute for the entire service
+)
+
+limiter.limit("20 per minute")(customers_bp)  # Limit customer routes to 20 requests per minute
 
 app.register_blueprint(customers_bp, url_prefix='/customers')
 

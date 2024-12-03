@@ -1,7 +1,28 @@
 from flask import Blueprint, request, jsonify, Flask
 from database.database import db, InventoryItem
+from sqlalchemy.sql import text
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 
 inventory_bp = Blueprint('inventory', __name__)
+
+@inventory_bp.route('/health', methods=['GET'])
+def health_check():
+    """
+    Health check for the Inventory service.
+    """
+    try:
+        db.session.execute(text('SELECT 1'))
+        db_status = "Healthy"
+    except Exception as e:
+        db_status = f"Unhealthy - {str(e)}"
+
+    return jsonify({
+        "service": "Inventory Service",
+        "status": "Healthy",
+        "database": db_status
+    }), 200
+
 
 def validate_inventory_data(data):
     """
@@ -182,6 +203,14 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:12345@mysql_contai
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db.init_app(app)
+
+limiter = Limiter(
+    get_remote_address,
+    app=app,
+    default_limits=["25 per minute"] 
+)
+
+limiter.limit("20 per minute")(inventory_bp)  # Limit inventory routes to 20 requests per minute
 
 app.register_blueprint(inventory_bp, url_prefix='/inventory')
 

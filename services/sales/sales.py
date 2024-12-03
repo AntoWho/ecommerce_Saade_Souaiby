@@ -1,8 +1,29 @@
 from flask import Blueprint, request, jsonify, Flask
 from database.database import db, Customer, InventoryItem, Sale
 from datetime import datetime
+from sqlalchemy.sql import text
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 
 sales_bp = Blueprint('sales', __name__)
+
+@sales_bp.route('/health', methods=['GET'])
+def health_check():
+    """
+    Health check for the Sales service.
+    """
+    try:
+        db.session.execute(text('SELECT 1'))
+        db_status = "Healthy"
+    except Exception as e:
+        db_status = f"Unhealthy - {str(e)}"
+
+    return jsonify({
+        "service": "Sales Service",
+        "status": "Healthy",
+        "database": db_status
+    }), 200
+
 
 @sales_bp.route('/display_goods', methods=['GET'])
 def display_available_goods():
@@ -138,6 +159,14 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:12345@mysql_contai
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db.init_app(app)
+
+limiter = Limiter(
+    get_remote_address,
+    app=app,
+    default_limits=["30 per minute"]  
+)
+
+limiter.limit("30 per minute")(sales_bp)
 
 app.register_blueprint(sales_bp, url_prefix='/sales')
 
