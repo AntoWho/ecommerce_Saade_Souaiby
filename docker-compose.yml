@@ -9,6 +9,12 @@ services:
       - "3306:3306"
     volumes:
       - db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+      timeout: 5s
 
   customers:
     build:
@@ -21,7 +27,8 @@ services:
       FLASK_APP: customers.py
       SQLALCHEMY_DATABASE_URI: mysql+pymysql://root:12345@mysql:3306/ecommerce
     depends_on:
-      - mysql
+      mysql:
+        condition: service_healthy
 
   inventory:
     build:
@@ -35,6 +42,7 @@ services:
       SQLALCHEMY_DATABASE_URI: mysql+pymysql://root:12345@mysql:3306/ecommerce
     depends_on:
       - mysql
+      - customers
 
   sales:
     build:
@@ -48,6 +56,7 @@ services:
       SQLALCHEMY_DATABASE_URI: mysql+pymysql://root:12345@mysql:3306/ecommerce
     depends_on:
       - mysql
+      - inventory
 
   reviews:
     build:
@@ -61,6 +70,7 @@ services:
       SQLALCHEMY_DATABASE_URI: mysql+pymysql://root:12345@mysql:3306/ecommerce
     depends_on:
       - mysql
+      - sales
 
 volumes:
   db_data:
