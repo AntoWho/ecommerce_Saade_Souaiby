@@ -35,4 +35,3 @@ pytest-cov
 memory-profiler
 line-profiler
 flask-testing
-ssnakeviz
