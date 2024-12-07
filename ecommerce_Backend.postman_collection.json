@@ -1,10 +1,10 @@
 {
 	"info": {
-		"_postman_id": "89ef2b07-e1d9-44ba-99f9-2171f5696d8e",
+		"_postman_id": "6ff5a95a-f2d5-44dd-a911-426a06c6938b",
 		"name": "ecommerce_Backend",
 		"description": "APIs for managing customers, inventory, sales, and reviews in the e-commerce backend.",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "32714611"
+		"_exporter_id": "33878366"
 	},
 	"item": [
 		{
@@ -195,6 +195,24 @@
 						"description": "Deducts funds from a customer's wallet."
 					},
 					"response": []
+				},
+				{
+					"name": "Health Check",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{customer_container}}/customers/health",
+							"host": [
+								"{{customer_container}}"
+							],
+							"path": [
+								"customers",
+								"health"
+							]
+						}
+					},
+					"response": []
 				}
 			],
 			"description": "API for managing customers"
@@ -358,6 +376,24 @@
 						"description": "Deletes an inventory item by name."
 					},
 					"response": []
+				},
+				{
+					"name": "Health Check",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{inventory_container}}/inventory/health",
+							"host": [
+								"{{inventory_container}}"
+							],
+							"path": [
+								"inventory",
+								"health"
+							]
+						}
+					},
+					"response": []
 				}
 			],
 			"description": "API for managing inventory"
@@ -449,6 +485,24 @@
 							]
 						},
 						"description": "Retrieves the purchase history of a specific customer."
+					},
+					"response": []
+				},
+				{
+					"name": "Health Check",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{sales_container}}/sales/health",
+							"host": [
+								"{{sales_container}}"
+							],
+							"path": [
+								"sales",
+								"health"
+							]
+						}
 					},
 					"response": []
 				}
@@ -632,6 +686,61 @@
 							"path": [
 								"reviews",
 								"review",
+								"{{review}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Health Check",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{reviews_container}}/reviews/health",
+							"host": [
+								"{{reviews_container}}"
+							],
+							"path": [
+								"reviews",
+								"health"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Flagged Reviews",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{reviews_container}}/reviews/flagged",
+							"host": [
+								"{{reviews_container}}"
+							],
+							"path": [
+								"reviews",
+								"flagged"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Flag a Review",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{reviews_container}}/reviews/flag/{{review}}",
+							"host": [
+								"{{reviews_container}}"
+							],
+							"path": [
+								"reviews",
+								"flag",
 								"{{review}}"
 							]
 						}

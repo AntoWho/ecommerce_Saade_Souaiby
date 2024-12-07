@@ -35,3 +35,4 @@ pytest-cov
 memory-profiler
 line-profiler
 flask-testing
+flask_limiter
