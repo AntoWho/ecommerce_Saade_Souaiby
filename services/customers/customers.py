@@ -6,6 +6,7 @@ import re
 from sqlalchemy.sql import text
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
+from flask_jwt_extended import JWTManager, create_access_token
 
 customers_bp = Blueprint('customers', __name__)
 
@@ -76,6 +77,26 @@ def validate_username(username):
         return False
     return True
 
+
+@customers_bp.route('/login', methods=['POST'])
+def login():
+    """
+    Authenticates user and generates a JWT.
+    """
+    data = request.json
+    username = data.get('username')
+    password = data.get('password')
+
+    user = Customer.query.filter_by(username=username).first()
+    if not user or not check_password_hash(user.password, password):
+        return jsonify({"error": "Invalid username or password."}), 401
+
+    token = create_access_token(
+    identity=str(user.id),  # Use a string for the identity field
+    additional_claims={"username": user.username}
+)
+
+    return jsonify({"token": token}), 200
 
 # Routes
 @customers_bp.route('/register', methods=['POST'])
@@ -279,8 +300,11 @@ app = Flask(__name__)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:12345@mysql_container:3306/ecommerce'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['JWT_SECRET_KEY'] = "3f2eb67d8e9f8b0d27f5c2f92a7ab7d78bcf29d9b1a0d2b1c42f68ec72e8cd50"  # Same key across all services
 
 db.init_app(app)
+jwt = JWTManager(app)
+
 limiter = Limiter(
     get_remote_address,
     app=app,
@@ -290,7 +314,6 @@ limiter = Limiter(
 limiter.limit("20 per minute")(customers_bp)  # Limit customer routes to 20 requests per minute
 
 app.register_blueprint(customers_bp, url_prefix='/customers')
-
 
 # Main entry point
 if __name__ == '__main__':

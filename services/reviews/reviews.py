@@ -4,6 +4,8 @@ from datetime import datetime
 from sqlalchemy.sql import text
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
+from flask_jwt_extended import JWTManager, jwt_required, create_access_token, get_jwt_identity
+
 
 reviews_bp = Blueprint('reviews', __name__)
 
@@ -25,6 +27,7 @@ def health_check():
     }), 200
 
 @reviews_bp.route('/submit', methods=['POST'])
+@jwt_required()
 def submit_review():
     """
     Allows customers to submit a review for a product.
@@ -76,6 +79,7 @@ def submit_review():
     return jsonify({"message": "Review submitted successfully and is pending approval."}), 201
 
 @reviews_bp.route('/update/<int:review_id>', methods=['PUT'])
+@jwt_required()
 def update_review(review_id):
     """
     Allows customers to update their existing review.
@@ -126,6 +130,7 @@ def update_review(review_id):
     return jsonify({"message": "Review updated successfully and is pending approval."}), 200
 
 @reviews_bp.route('/delete/<int:review_id>', methods=['DELETE'])
+@jwt_required()
 def delete_review(review_id):
     """
     Allows customers to delete their review.
@@ -326,8 +331,10 @@ app = Flask(__name__)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:12345@mysql_container:3306/ecommerce'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['JWT_SECRET_KEY'] = "3f2eb67d8e9f8b0d27f5c2f92a7ab7d78bcf29d9b1a0d2b1c42f68ec72e8cd50"  
 
 db.init_app(app)
+jwt = JWTManager(app)
 
 limiter = Limiter(
     get_remote_address,
