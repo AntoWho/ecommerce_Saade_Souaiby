@@ -56,13 +56,13 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{customer_container}}/customers/customers  {{username}}",
+							"raw": "{{customer_container}}/customers/customers",
 							"host": [
 								"{{customer_container}}"
 							],
 							"path": [
 								"customers",
-								"customers  {{username}}"
+								"customers"
 							]
 						},
 						"description": "Retrieves all registered customers."
@@ -209,6 +209,66 @@
 							"path": [
 								"customers",
 								"health"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Customer Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Parse the response to extract the token\r",
+									"let response = pm.response.json();\r",
+									"\r",
+									"// Ensure the token exists in the response\r",
+									"if (response.token) {\r",
+									"    let token = String(response.token); // Convert token to string (if needed)\r",
+									"    pm.collectionVariables.set(\"auth_token\", token); // Set the variable\r",
+									"    console.log(\"Auth token successfully updated:\", token);\r",
+									"} else {\r",
+									"    console.error(\"Auth token is missing in the response!\");\r",
+									"}\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"username\": \"john.doe\",\r\n  \"password\": \"securePass123\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{customer_container}}/customers/login",
+							"host": [
+								"{{customer_container}}"
+							],
+							"path": [
+								"customers",
+								"login"
 							]
 						}
 					},
@@ -515,6 +575,16 @@
 				{
 					"name": "Submit Review",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{auth_token}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [],
 						"body": {
@@ -542,6 +612,16 @@
 				{
 					"name": "Update Review",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{auth_token}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "PUT",
 						"header": [],
 						"body": {
@@ -570,6 +650,16 @@
 				{
 					"name": "Delete Review",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{auth_token}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "DELETE",
 						"header": [],
 						"body": {
@@ -750,6 +840,28 @@
 			]
 		}
 	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
 	"variable": [
 		{
 			"key": "username",
@@ -784,6 +896,11 @@
 			"key": "reviews_container",
 			"value": "localhost:5004",
 			"type": "default"
+		},
+		{
+			"key": "auth_token",
+			"value": "",
+			"type": "string"
 		}
 	]
 }
